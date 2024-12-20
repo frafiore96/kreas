@@ -13,15 +13,15 @@
         <span>{{ product.quantity }}</span>
         <button @click="increaseQuantity(index)">+</button>
       </div>
-      <!-- Arrotonda il prezzo totale del prodotto e lo formatta con due decimali -->
+      <!-- Product price -->
       <p class="price.each">€ {{ (product.price * product.quantity).toFixed(2) }}</p>
       <i class="bi bi-x-circle-fill" @click="removeProduct(index)"></i>
     </div>
     <div class="cart-summary">
-      <!-- Totale scontato, arrotondato e formattato con due decimali -->
+      <!-- Discounted Total -->
       <h3>Total: € {{ discountedTotal }}</h3>
-      <!-- Messaggio di sconto -->
-      <p v-if="totalQuantity > 3">Hai ricevuto uno sconto del 10%!</p>
+      <!-- Discount message -->
+      <p v-if="totalQuantity > 3">You have received a 10% discount!</p>
     </div>
     <button class="check-out-btn" @click="checkout">Check out</button>
     
@@ -41,14 +41,12 @@ export default {
         0
       );
     },
-    // Somma il numero totale di unità ordinate (quantità)
     totalQuantity() {
       return this.cartItems.reduce((sum, product) => sum + product.quantity, 0);
     },
-    // Applica lo sconto del 10% se la quantità totale supera 3
     discountedTotal() {
       const totalWithDiscount = this.totalQuantity > 3 ? this.total * 0.9 : this.total;
-      return totalWithDiscount.toFixed(2); // Arrotonda a 2 decimali
+      return totalWithDiscount.toFixed(2); 
     },
   },
   methods: {
@@ -68,7 +66,7 @@ export default {
     },
     checkout() {
       alert('Thank you for purchasing our products!');
-      this.$emit('update-cart', []); // Svuota il carrello
+      this.$emit('update-cart', []);
     },
   },
 };

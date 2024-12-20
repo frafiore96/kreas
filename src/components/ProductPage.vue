@@ -17,11 +17,6 @@
     methods: {
       addToCart() {
         this.$emit('add-to-cart', this.product);
-      
-        // const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        // cart.push(this.product);
-        // localStorage.setItem('cart', JSON.stringify(cart));
-        // alert('Prodotto aggiunto al carrello!');
       },
     },
   };

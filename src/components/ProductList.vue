@@ -57,7 +57,7 @@
   }
   .product-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Griglia 2x3 (2 colonne) */
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     padding: 15px;
   
@@ -73,7 +73,7 @@
   }
   
   .product-item img {
-    width: 100%; /* Le immagini occupano tutta la larghezza del contenitore */
+    width: 100%; 
     height: auto;
     border-radius: 8px;
   }
@@ -108,7 +108,7 @@
   }
   
   .product-item img {
-    width: 100%; /* Le immagini occupano tutta la larghezza del contenitore */
+    width: 100%; 
     height: auto;
     border-radius: 15px;
   }
