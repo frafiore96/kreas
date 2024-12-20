@@ -98,7 +98,8 @@ h1 {
   margin-bottom: 15px;
   width: 100%;
   height: auto;
-  padding: 10px;
+  padding-top:10px;
+  padding-bottom:10px;
 }
 .cart-item img {
   width: 50px;
