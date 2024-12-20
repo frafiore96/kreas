@@ -13,14 +13,11 @@
         <span>{{ product.quantity }}</span>
         <button @click="increaseQuantity(index)">+</button>
       </div>
-      <!-- Product price -->
       <p class="price.each">€ {{ (product.price * product.quantity).toFixed(2) }}</p>
       <i class="bi bi-x-circle-fill" @click="removeProduct(index)"></i>
     </div>
     <div class="cart-summary">
-      <!-- Discounted Total -->
       <h3>Total: € {{ discountedTotal }}</h3>
-      <!-- Discount message -->
       <p v-if="totalQuantity > 3">You have received a 10% discount!</p>
     </div>
     <button class="check-out-btn" @click="checkout">Check out</button>
@@ -34,7 +31,6 @@ export default {
     cartItems: Array,
   },
   computed: {
-    // Calcola il totale senza arrotondamento
     total() {
       return this.cartItems.reduce(
         (sum, product) => sum + product.price * product.quantity,
@@ -166,6 +162,12 @@ h1 {
 }
 
 @media only screen and (min-width:845px) {
+
+  body {
+  touch-action: pan-y; /* Permetti solo lo scroll verticale */
+  overflow-x: hidden; /* Previeni lo spostamento orizzontale */
+}
+
 
   h1 {
     font-size: 40px;
