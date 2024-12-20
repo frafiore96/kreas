@@ -5,7 +5,6 @@
         <img src="./assets/Kreas.verde_logo.png" alt="Kreas Logo" class="logo" />
         <div class="icons">
           <i class="bi bi-cart3" @click="showCart">
-             <!-- Pallino verde quando il carrello non è vuoto -->
             <span v-if="cartItems.length > 0" class="cart-notification"></span>
           </i>
           <i class="bi bi-search" @click="toggleSearch"></i>
@@ -16,7 +15,6 @@
       </div>
     </header>
 
-    <!-- Mostra la pagina corrente in base a `currentPage` -->
     <ProductList
       v-if="currentPage === 'list'"
       :search-query="searchQuery"
@@ -44,6 +42,10 @@ import ProductList from './components/ProductList.vue';
 import ProductPage from './components/ProductPage.vue';
 import CartPage from './components/CartPage.vue';
 
+document.addEventListener('dblclick', (e) => {
+  e.preventDefault();
+});
+
 export default {
   components: {
     ProductList,
@@ -52,11 +54,11 @@ export default {
   },
   data() {
     return {
-      currentPage: 'list', // Può essere 'list', 'product' o 'cart'
+      currentPage: 'list', // Can be 'list', 'product' or 'cart'
       selectedProduct: null,
       searchActive: false,
       searchQuery: '',
-      cartItems: JSON.parse(localStorage.getItem('cart')) || [], // Carica i prodotti dal carrello salvato
+      cartItems: JSON.parse(localStorage.getItem('cart')) || [], 
     };
   },
   methods: {
@@ -77,23 +79,17 @@ export default {
     toggleSearch() {
       this.searchActive = !this.searchActive;
     },
-     // Aggiungi un prodotto al carrello
      addToCart(product) {
       const existingProductIndex = this.cartItems.findIndex(item => item.name === product.name);
 
       if (existingProductIndex !== -1) {
-        // Se il prodotto è già nel carrello, aumenta solo la quantità
         this.cartItems[existingProductIndex].quantity += 1;
       } else {
-        // Se il prodotto non è nel carrello, aggiungilo
         this.cartItems.push({ ...product, quantity: 1 });
       }
-
-      // Salva il carrello nel localStorage e naviga alla pagina del carrello
       localStorage.setItem('cart', JSON.stringify(this.cartItems));
-      this.showCart(); // Vai direttamente alla CartPage dopo aver aggiunto
+      this.showCart();
     },
-    // Aggiorna il carrello (es. quando si modifica la quantità o si rimuove un prodotto)
     updateCart(updatedCart) {
       this.cartItems = updatedCart;
       localStorage.setItem('cart', JSON.stringify(this.cartItems));
