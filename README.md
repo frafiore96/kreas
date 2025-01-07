@@ -68,5 +68,6 @@ npm run build
 Lint with ESLint
 ```sh
 npm run lint
+```
 
 <p align="right">(<a href="#readme-top">Back to top</a>)</p>
