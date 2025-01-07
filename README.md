@@ -22,17 +22,17 @@ You can access the app <a href="https://kreas-mangia-sostenibile.netlify.app">he
 
 ## Project Structure
 
-kreas/
-├── public/              # Static files accessible directly
-├── src/                 # Application source code
-│   ├── assets/          # Resources like images and multimedia files
-│   ├── components/      # Reusable components
-│   ├── App.vue          # Root component of the application
-│   └── main.js          # Application entry point
-├── index.html           # Main HTML file
-├── package.json         # Project dependencies and scripts
-├── vite.config.js       # Vite configuration
-└── README.md            # Project documentation
+kreas/ <br>
+├── public/              # Static files accessible directly <br>
+├── src/                 # Application source code <br>
+│   ├── assets/          # Resources like images and multimedia files <br>
+│   ├── components/      # Reusable components <br>
+│   ├── App.vue          # Root component of the application <br>
+│   └── main.js          # Application entry point <br>
+├── index.html           # Main HTML file <br>
+├── package.json         # Project dependencies and scripts <br>
+├── vite.config.js       # Vite configuration <br>
+└── README.md            # Project documentation <br>
 
 <p align="right">(<a href="#readme-top">Back to top</a>)</p>
 
