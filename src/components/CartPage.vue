@@ -2,7 +2,7 @@
   <div>
     <h1>Cart</h1>
     <div class="back-to-list">
-      <i class="bi bi-arrow-left-circle arrow-left" @click="$emit('back-to-list')"></i>
+      <i class="bi bi-arrow-left-circle arrow-left" @click="goBack"></i>
     </div>
     <p class="adv">Buy more than 3 products for a 10% discount.</p>
     <div v-for="(product, index) in cartItems" :key="index" class="cart-item">
@@ -21,55 +21,78 @@
       <p v-if="totalQuantity > 3">You have received a 10% discount!</p>
     </div>
     <button class="check-out-btn" @click="checkout">Check out</button>
-    
   </div>
 </template>
 
 <script>
-export default {
+import { computed, defineComponent, ref } from 'vue';
+
+export default defineComponent({
   props: {
     cartItems: Array,
   },
-  computed: {
-    total() {
-      return this.cartItems.reduce(
+  emits: ['update-cart', 'back-to-list'],
+  setup(props, { emit }) {
+    const cartItems = ref(props.cartItems);
+
+    const total = computed(() => {
+      return cartItems.value.reduce(
         (sum, product) => sum + product.price * product.quantity,
         0
       );
-    },
-    totalQuantity() {
-      return this.cartItems.reduce((sum, product) => sum + product.quantity, 0);
-    },
-    discountedTotal() {
-      const totalWithDiscount = this.totalQuantity > 3 ? this.total * 0.9 : this.total;
-      return totalWithDiscount.toFixed(2); 
-    },
-  },
-  methods: {
-    increaseQuantity(index) {
-      this.cartItems[index].quantity++;
-      this.$emit('update-cart', this.cartItems);
-    },
-    decreaseQuantity(index) {
-      if (this.cartItems[index].quantity > 1) {
-        this.cartItems[index].quantity--;
-        this.$emit('update-cart', this.cartItems);
+    });
+
+    const totalQuantity = computed(() => {
+      return cartItems.value.reduce((sum, product) => sum + product.quantity, 0);
+    });
+
+    const discountedTotal = computed(() => {
+      const totalWithDiscount = totalQuantity.value > 3 ? total.value * 0.9 : total.value;
+      return totalWithDiscount.toFixed(2);
+    });
+
+    const increaseQuantity = (index) => {
+      cartItems.value[index].quantity++;
+      emit('update-cart', cartItems.value);
+    };
+
+    const decreaseQuantity = (index) => {
+      if (cartItems.value[index].quantity > 1) {
+        cartItems.value[index].quantity--;
+        emit('update-cart', cartItems.value);
       }
-    },
-    removeProduct(index) {
-      this.cartItems.splice(index, 1);
-      this.$emit('update-cart', this.cartItems);
-    },
-    checkout() {
+    };
+
+    const removeProduct = (index) => {
+      cartItems.value.splice(index, 1);
+      emit('update-cart', cartItems.value);
+    };
+
+    const checkout = () => {
       alert('Thank you for purchasing our products!');
-      this.$emit('update-cart', []);
-    },
+      emit('update-cart', []);
+    };
+
+    const goBack = () => {
+      emit('back-to-list');
+    };
+
+    return {
+      cartItems,
+      total,
+      totalQuantity,
+      discountedTotal,
+      increaseQuantity,
+      decreaseQuantity,
+      removeProduct,
+      checkout,
+      goBack,
+    };
   },
-};
+});
 </script>
 
 <style scoped>
-
 h1 {
   color: white;
   font-size: 30px;
@@ -228,5 +251,4 @@ p  {
 }
 }
 </style>
-
   

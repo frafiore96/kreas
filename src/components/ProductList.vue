@@ -1,56 +1,62 @@
 <template>
-  <h1> Our products </h1>
-    <div>
-      <div class="product-grid">
-        <div
-          v-for="product in filteredProducts"
-          :key="product.id"
-          class="product-item"
-          @click="selectProduct(product)"
-        >
-          <img :src="product.image" :alt="product.name" />
-          <h3>{{ product.name }}</h3>
-          <p>{{ product.price }} €</p>
-        </div>
+  <h1>Our products</h1>
+  <div>
+    <div class="product-grid">
+      <div
+        v-for="product in filteredProducts"
+        :key="product.id"
+        class="product-item"
+        @click="selectProduct(product)"
+      >
+        <img :src="product.image" :alt="product.name" />
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.price }} €</p>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      searchQuery: String,
-    },
-    data() {
-      return {
-        products: [],
-      };
-    },
-    computed: {
-      filteredProducts() {
-        return this.products.filter((product) =>
-          product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-      },
-    },
-    methods: {
-      selectProduct(product) {
-        this.$emit('select-product', product);
-      },
-    },
-    created() {
+  </div>
+</template>
+
+<script>
+import { ref, computed, onMounted, defineComponent } from 'vue';
+
+export default defineComponent({
+  props: {
+    searchQuery: String,
+  },
+  emits: ['select-product'],
+  setup(props, { emit }) {
+    const products = ref([]);
+
+    const filteredProducts = computed(() => {
+      return products.value.filter((product) =>
+        product.name.toLowerCase().includes(props.searchQuery.toLowerCase())
+      );
+    });
+
+    const selectProduct = (product) => {
+      emit('select-product', product);
+    };
+
+    onMounted(() => {
       fetch('https://ott-fogliata.github.io/vuejs-s2i-repository/cultured-meat.json')
-        .then(response => response.json())
-        .then(data => {
-          this.products = data;
+        .then((response) => response.json())
+        .then((data) => {
+          products.value = data;
         })
-        .catch(error => console.error('Errore nel recupero dei dati:', error));
-    },
-  };
-  </script>
-  
-  <style scoped>
-  h1 {
+        .catch((error) => console.error('Errore nel recupero dei dati:', error));
+    });
+
+    return {
+      products,
+      filteredProducts,
+      selectProduct,
+    };
+  },
+});
+</script>
+
+<style scoped>
+h1 {
     color: white;
     font-size: 30px;
     text-align: center;
@@ -125,4 +131,4 @@
   }
 
   }
-  </style>
+</style>

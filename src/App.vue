@@ -10,8 +10,8 @@
           <i class="bi bi-search" @click="toggleSearch"></i>
         </div>
         <div v-if="searchActive" class="search-bar">
-        <input type="text" v-model="searchQuery" placeholder="Search products..." />
-      </div>
+          <input type="text" v-model="searchQuery" placeholder="Search products..." />
+        </div>
       </div>
     </header>
 
@@ -38,13 +38,10 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
 import ProductList from './components/ProductList.vue';
 import ProductPage from './components/ProductPage.vue';
 import CartPage from './components/CartPage.vue';
-
-document.addEventListener('dblclick', (e) => {
-  e.preventDefault();
-});
 
 export default {
   components: {
@@ -52,48 +49,73 @@ export default {
     ProductPage,
     CartPage,
   },
-  data() {
-    return {
-      currentPage: 'list', // Can be 'list', 'product' or 'cart'
-      selectedProduct: null,
-      searchActive: false,
-      searchQuery: '',
-      cartItems: JSON.parse(localStorage.getItem('cart')) || [], 
+  setup() {
+    const currentPage = ref('list');
+    const selectedProduct = ref(null);
+    const searchActive = ref(false);
+    const searchQuery = ref('');
+    const cartItems = ref(JSON.parse(localStorage.getItem('cart')) || []);
+
+    const showList = () => {
+      currentPage.value = 'list';
+      searchActive.value = false;
+      searchQuery.value = '';
     };
-  },
-  methods: {
-    showList() {
-      this.currentPage = 'list';
-      this.searchActive = false;
-      this.searchQuery = '';
-    },
-    showProduct(product) {
-      this.selectedProduct = product;
-      this.currentPage = 'product';
-      this.searchActive = false;
-      this.searchQuery = '';
-    },
-    showCart() {
-      this.currentPage = 'cart';
-    },
-    toggleSearch() {
-      this.searchActive = !this.searchActive;
-    },
-     addToCart(product) {
-      const existingProductIndex = this.cartItems.findIndex(item => item.name === product.name);
+
+    const showProduct = (product) => {
+      selectedProduct.value = product;
+      currentPage.value = 'product';
+      searchActive.value = false;
+      searchQuery.value = '';
+    };
+
+    const showCart = () => {
+      currentPage.value = 'cart';
+    };
+
+    const toggleSearch = () => {
+      searchActive.value = !searchActive.value;
+    };
+
+    const addToCart = (product) => {
+      const existingProductIndex = cartItems.value.findIndex(
+        (item) => item.name === product.name
+      );
 
       if (existingProductIndex !== -1) {
-        this.cartItems[existingProductIndex].quantity += 1;
+        cartItems.value[existingProductIndex].quantity += 1;
       } else {
-        this.cartItems.push({ ...product, quantity: 1 });
+        cartItems.value.push({ ...product, quantity: 1 });
       }
-      localStorage.setItem('cart', JSON.stringify(this.cartItems));
-      this.showCart();
-    },
-    updateCart(updatedCart) {
-      this.cartItems = updatedCart;
-      localStorage.setItem('cart', JSON.stringify(this.cartItems));
-    },
+
+      localStorage.setItem('cart', JSON.stringify(cartItems.value));
+      showCart();
+    };
+
+    const updateCart = (updatedCart) => {
+      cartItems.value = updatedCart;
+      localStorage.setItem('cart', JSON.stringify(cartItems.value));
+    };
+
+    onMounted(() => {
+      document.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+      });
+    });
+
+    return {
+      currentPage,
+      selectedProduct,
+      searchActive,
+      searchQuery,
+      cartItems,
+      showList,
+      showProduct,
+      showCart,
+      toggleSearch,
+      addToCart,
+      updateCart,
+    };
   },
 };
 </script>
@@ -101,4 +123,3 @@ export default {
 <style>
 @import './assets/main.css';
 </style>
-

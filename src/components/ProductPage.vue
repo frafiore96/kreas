@@ -1,30 +1,42 @@
 <template>
-      <div class="product-details">
-        <i class="bi bi-arrow-left-circle arrow-left" @click="$emit('back-to-list')"></i>
-        <img :src="product.image" :alt="product.name" />
-        <h1>{{ product.name }}</h1>
-        <p>{{ product.description }}</p>
-        <p class="price">{{ product.price }} €</p>
-        <button class="button-atc" @click="addToCart"><p>Add to cart</p></button>
-      </div>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      product: Object,
-    },
-    methods: {
-      addToCart() {
-        this.$emit('add-to-cart', this.product);
-      },
-    },
-  };
-  </script>
-  
-<style>
+  <div class="product-details">
+    <i class="bi bi-arrow-left-circle arrow-left" @click="goBack"></i>
+    <img :src="product.image" :alt="product.name" />
+    <h1>{{ product.name }}</h1>
+    <p>{{ product.description }}</p>
+    <p class="price">{{ product.price }} €</p>
+    <button class="button-atc" @click="addToCart">
+      <p>Add to cart</p>
+    </button>
+  </div>
+</template>
 
+<script>
+import { defineComponent } from 'vue';
 
+export default defineComponent({
+  props: {
+    product: Object,
+  },
+  emits: ['add-to-cart', 'back-to-list'],
+  setup(props, { emit }) {
+    const addToCart = () => {
+      emit('add-to-cart', props.product);
+    };
+
+    const goBack = () => {
+      emit('back-to-list');
+    };
+
+    return {
+      addToCart,
+      goBack,
+    };
+  },
+});
+</script>
+
+<style scoped>
 .button-atc {
     cursor: pointer;
     background-color: rgb(11, 39, 18);
